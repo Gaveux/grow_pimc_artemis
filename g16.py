@@ -18,6 +18,7 @@ import shutil
 import string
 import util
 import g16_dat
+import sys
 
 #==========================================================================
 # a function to establish data structures for g16 methods
@@ -49,7 +50,6 @@ def setup(s):
   if s.AI_JobType == 'simple':
 
     # only need one type of frequency calculation
-
     hdr='%chk=' + s.AI_Scratch + s.Molecule + '.chk \n'
     if s.AI_Rwf != 'default':
       hdr += '%rwf=' + s.AI_Rwf + '\n'
@@ -308,6 +308,8 @@ def check_triplet(size,s):
   # the 'simple' calculation type
 
   logfile = s.Molecule + '.log'
+  chkfile = s.Molecule + '.chk'
+  fchkfile = s.Molecule + '.fchk'
   print '    g16 single point energies ' + size 
 
   # run the sequence of single point energies: 
@@ -321,6 +323,13 @@ def check_triplet(size,s):
   # run the gaussian calculation without watching exit status
 
   os.system('g16 <' + comfile + ' > ' + logfile)
+
+  # a bug in Gaussian 16 Rev A.03 fails to call fchk command
+  # this causes the program to hang, writing checkpoint needs to 
+  # be done manually
+  os.system('formchk ' + chkfile + ' ' + fchkfile )
+  os.system('cp ' + fchkfile + ' Test.FChk')
+  
 
   # check for normal termination and put the checkpoint file somewhere
 
@@ -396,11 +405,20 @@ def analytic_freq(job_key,size,s):
   print '    g16 analytic frequency ' + size 
 
   # build comfile, run the job
-
   logfile = s.Molecule + '.log'
+  chkfile = s.Molecule + '.chk'
+  fchkfile = s.Molecule + '.fchk'
+
   keyword_string = s.AI_Headers[job_key]
+
+  #sys.exit(0)
   comfile = build_comfile(keyword_string,size,s)
   util.Run('g16 <' + comfile + ' > ' + logfile,s)
+
+  # bug for Gaussian Rev A.03 that fails to call fchk
+  # writing checkpoint file manually
+  os.system('formchk ' + chkfile + ' ' + fchkfile )
+  os.system('cp ' + fchkfile + ' Test.FChk')
 
   # check for normal termination and spin contamination
 

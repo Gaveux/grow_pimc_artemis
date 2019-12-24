@@ -129,7 +129,6 @@ methods['sp'] = '''
 scf=(tight,conver=10)
 guess=read
 iop(2/12=1)
-formcheck=all
 gen  
 '''
 # correlated methods with analytic frequencies
@@ -306,7 +305,6 @@ methods['mp2'] = '''
 scf=(tight,conver=10)
 freq=noraman
 iop(2/12=1)
-formcheck=all
 punch=(coord,derivatives)
 gen  
 '''
