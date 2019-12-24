@@ -99,7 +99,7 @@ def do_dynamics(s):
     #print 'pimc90 run_string =',run_string
     # hardwire in the filenames
     #run_string = 'pimc90 pimc.in system.in iseed.in binning.in IN_INTERP POT IN_ATOMPERMS outdir chk chk file > OUT_PIMC'
-    run_string = 'pimc_O4_serial_grow pimc.in system.in iseed.in binning.in IN_INTERP POT IN_ATOMPERMS outdir chk chk file > OUT_PIMC'
+    run_string = 'pimc_grow pimc.in system.in iseed.in binning.in IN_INTERP POT IN_ATOMPERMS outdir chk chk file blkfile > OUT_PIMC'
     os.system(run_string)
     # copy summary of results into log file
     os.system(" grep 'Total average energy:' OUT_PIMC ")
@@ -302,7 +302,7 @@ def do_convergence_check(s):
     #run_string = run_string+out_dir+'> OUT_PIMC'
     #hardwire in the run_string
     #run_string = 'pimc90 pimc.in system.in iseed.in binning.in IN_INTERP POT IN_ATOMPERMS outdir chk chk file > OUT_PIMC'
-    run_string = 'pimc_grow pimc.in system.in iseed.in binning.in IN_INTERP POT IN_ATOMPERMS outdir chk chk file > OUT_PIMC'
+    run_string = 'pimc_grow pimc.in system.in iseed.in binning.in IN_INTERP POT IN_ATOMPERMS outdir chk chk file blkfile > OUT_PIMC'
     util.Run(run_string,s)
     # copy summary of results into log file
     os.system(" grep 'Total average energy:' OUT_PIMC ")
